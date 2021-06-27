@@ -1,5 +1,5 @@
 const getLoginPage = (req, res) => {
-  res.send('login page from crontroller');
+  res.sendFile('login.html', { root: './views/pages/examples' });
 };
 
 module.exports = { getLoginPage };
