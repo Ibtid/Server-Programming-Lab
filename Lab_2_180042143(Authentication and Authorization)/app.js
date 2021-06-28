@@ -15,4 +15,8 @@ app.get('/', (req, res) => {
   res.sendFile('starter.html', { root: './views' });
 });
 
+app.use((req, res) => {
+  res.sendFile('404.html', { root: './views/pages/examples' });
+});
+
 module.exports = app;
