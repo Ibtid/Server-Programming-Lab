@@ -11,5 +11,9 @@ router.post('/login', postLogin);
 router.get('/login', getLogin);
 router.post('/register', postRegister);
 router.get('/register', getRegister);
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/welcome');
+});
 
 module.exports = router;

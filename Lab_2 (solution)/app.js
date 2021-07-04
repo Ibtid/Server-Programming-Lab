@@ -4,6 +4,10 @@ const app = express();
 const session = require('express-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
+const passport = require('passport');
+
+//Passport Strategy
+require('./config/passport')(passport);
 
 //Connect to DB
 mongoose
@@ -29,6 +33,8 @@ app.use(
   })
 );
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 //BodyParser
 app.use(express.urlencoded({ extended: false }));
@@ -36,6 +42,7 @@ app.use(express.urlencoded({ extended: false }));
 //Routes
 const indexRoutes = require('./routes/index.routes');
 const userRoutes = require('./routes/users.routes');
+
 app.use(indexRoutes);
 app.use('/users', userRoutes);
 
