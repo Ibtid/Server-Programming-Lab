@@ -55,9 +55,10 @@ const postRegister = async (req, res) => {
 const postLogin = async (req, res) => {
   const email = req.body.email;
   const pass = req.body.password;
+
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    const passMatch = await bcrypt.compare(pass, existingUser.passwordHash);
+    const passMatch = bcrypt.compare(pass, existingUser.passwordHash);
     if (passMatch) {
       localStorage.setItem('name', existingUser.name);
       res.redirect('/dashboard');
