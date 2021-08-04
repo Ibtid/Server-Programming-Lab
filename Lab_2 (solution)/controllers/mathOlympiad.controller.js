@@ -151,6 +151,42 @@ const selectMO = (req, res) => {
     });
 };
 
+const getEditMO = (req, res) => {
+  const id = req.params.id;
+  // const tshirt=req.params.tshirt
+  console.log('wd ', id, '  ');
+  let info = [];
+  MathOlympiad.findOne({ _id: id })
+    .then((data) => {
+      info = data;
+      // console.log("info ", info);
+      res.render('math-olympiad/editParticipant.ejs', {
+        error: req.flash('error'),
+        participant: info,
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+      error = 'Failed to fetch participants';
+      res.render('math-olympiad/editParticipant.ejs', {
+        error: req.flash('error', error),
+        participant: info,
+      });
+    });
+};
+
+const postEditMO = async (req, res) => {
+  const { name, contact, category, email, institution, tshirt } = req.body;
+
+  const data = await MathOlympiad.findOneAndUpdate(
+    { name: name, contact: contact },
+    { category, email, institution, tshirt }
+  );
+  if (data) {
+    console.log('findOneAndUpdate ', data);
+    res.redirect('/MathOlympiad/list');
+  }
+};
 module.exports = {
   getMO,
   postMO,
@@ -158,4 +194,6 @@ module.exports = {
   deleteMO,
   paymentDoneMO,
   selectMO,
+  getEditMO,
+  postEditMO,
 };
