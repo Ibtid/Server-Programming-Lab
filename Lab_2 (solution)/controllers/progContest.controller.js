@@ -193,27 +193,6 @@ const postEditPC = async (req, res) => {
     TM2tshirt,
   } = req.body;
 
-  console.log(
-    teamName,
-    institute,
-    coachName,
-    coachContact,
-    coachEmail,
-    coachTshirt,
-    TLName,
-    TLContact,
-    TLEmail,
-    TLtshirt,
-    TM1Name,
-    TM1Contact,
-    TM1Email,
-    TM1tshirt,
-    TM2Name,
-    TM2Contact,
-    TM2Email,
-    TM2tshirt
-  );
-
   const data = await ProgContest.findOneAndUpdate(
     { teamName: teamName, institute: institute },
     {
