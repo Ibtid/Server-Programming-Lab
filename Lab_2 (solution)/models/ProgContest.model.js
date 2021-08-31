@@ -93,6 +93,11 @@ const progContestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  verificationCode: {
+    type: String,
+    required: true,
+    unique: true,
+  },
 });
 
 const ProgContest = mongoose.model('programming-contest', progContestSchema);

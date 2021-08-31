@@ -1,4 +1,7 @@
 const ProgContest = require('../models/ProgContest.model');
+const sendMails = require('../config/mailer');
+var crypto = require('crypto');
+
 const getPC = (req, res) => {
   res.render('prog-contest/registerTeam.ejs', { error: req.flash('error') });
 };
@@ -30,6 +33,7 @@ const postPC = (req, res) => {
   const paid = 0;
   const selected = false;
   let error = '';
+  var verificationCode = crypto.randomBytes(20).toString('hex');
 
   ProgContest.findOne({ teamName: teamName, institute: institute }).then(
     (team) => {
@@ -60,6 +64,7 @@ const postPC = (req, res) => {
           total,
           paid,
           selected,
+          verificationCode,
         });
         participant
           .save()
@@ -67,10 +72,23 @@ const postPC = (req, res) => {
             error =
               'Team for Programming Contest has been registered successfully!!';
             console.log('save ', error);
+            const mailOptions = {
+              from: 'teamupp89@gmail.com',
+              to: TLEmail,
+              subject: 'Registration on ICT Fest 2021',
+              text:
+                'Your team "' +
+                teamName +
+                '" has been registered successfully for Programming contest. Keep this code safe: ' +
+                verificationCode,
+            };
+
+            sendMails(mailOptions);
             req.flash('error', error);
             res.redirect('/ProgContest/register');
           })
-          .catch(() => {
+          .catch((err) => {
+            console.log(err);
             error = 'Unexpected error';
             console.log('error ', error);
             req.flash('error', error);

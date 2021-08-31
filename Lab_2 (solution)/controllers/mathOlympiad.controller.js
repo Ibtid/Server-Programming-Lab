@@ -1,4 +1,6 @@
 const MathOlympiad = require('../models/MathOlympiad.model');
+const sendMails = require('../config/mailer');
+var crypto = require('crypto');
 
 const getMO = (req, res) => {
   res.render('math-olympiad/register.ejs', { error: req.flash('error') });
@@ -25,6 +27,7 @@ const postMO = (req, res) => {
   const total = registrationFee;
   const paid = 0;
   const selected = false;
+  var verificationCode = crypto.randomBytes(20).toString('hex');
 
   MathOlympiad.findOne({ name: name, contact: contact }).then((participant) => {
     if (participant) {
@@ -43,16 +46,28 @@ const postMO = (req, res) => {
         total,
         selected,
         tshirt,
+        verificationCode,
       });
       participant
         .save()
         .then(() => {
           error = 'Parcitipant has been registered successfully';
           console.log(error);
+          const mailOptions = {
+            from: 'teamupp89@gmail.com',
+            to: email,
+            subject: 'Registration on ICT Fest 2021',
+            text:
+              'You have registered successfully for Programming contest. Keep this code safe: ' +
+              verificationCode,
+          };
+
+          sendMails(mailOptions);
           req.flash('error', error);
           res.redirect('/MathOlympiad/register');
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           error = 'An unknown error occurred';
           console.log(error);
           req.flash('error', error);
