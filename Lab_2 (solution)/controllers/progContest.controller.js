@@ -72,9 +72,10 @@ const postPC = (req, res) => {
             error =
               'Team for Programming Contest has been registered successfully!!';
             console.log('save ', error);
+            let allEmails = [TLEmail, TM1Email, TM2Email, coachEmail];
             const mailOptions = {
               from: 'teamupp89@gmail.com',
-              to: TLEmail,
+              to: allEmails,
               subject: 'Registration on ICT Fest 2021',
               text:
                 'Your team "' +
