@@ -66,25 +66,31 @@ const postPC = (req, res) => {
           selected,
           verificationCode,
         });
+
         participant
           .save()
           .then(() => {
             error =
               'Team for Programming Contest has been registered successfully!!';
             console.log('save ', error);
-            let allEmails = [TLEmail, TM1Email, TM2Email, coachEmail];
-            const mailOptions = {
-              from: 'teamupp89@gmail.com',
-              to: allEmails,
-              subject: 'Registration on ICT Fest 2021',
-              text:
-                'Your team "' +
-                teamName +
-                '" has been registered successfully for Programming contest. Keep this code safe: ' +
-                verificationCode,
-            };
+            let allEmails = [
+              { name: TLName, email: TLEmail },
+              { name: TM1Name, email: TM1Email },
+              { name: TM2Email, email: TM2Email },
+              { name: coachName, email: coachEmail },
+            ];
 
-            sendMails(mailOptions);
+            allEmails.forEach((person) => {
+              const mailOptions = {
+                from: 'teamupp89@gmail.com',
+                to: person.email,
+                subject: 'Registration on ICT Fest 2021',
+                text: `You ${person.name} and your team ${teamName} has successfully registered for ICT fest programming contest. Keep this code safe: ${verificationCode}`,
+              };
+
+              sendMails(mailOptions);
+            });
+
             req.flash('error', error);
             res.redirect('/ProgContest/register');
           })
